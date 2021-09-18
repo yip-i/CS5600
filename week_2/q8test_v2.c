@@ -24,18 +24,26 @@ int main(int argc, char* argv[]) {
         int x = 3;
         close(fd[0]);
         dup2(fd[1],STDOUT_FILENO);
-        printf("2");
+        printf("%d", getpid());
         close(fd[1]);
     } else {
-        close(fd[1]);
+        int pid2 = fork();
 
-        int y;
-        //read(fd[0], &y, sizeof(int));
-        dup2(fd[0], STDIN_FILENO);
-        scanf("%d", &y);
+        if (pid2 == 0) {
+            close(fd[1]);
 
-        close(fd[0]);
+            int y;
+            //read(fd[0], &y, sizeof(int));
+            dup2(fd[0], STDIN_FILENO);
+            scanf("%d", &y);
 
-        printf("Output: %d\n", y);
+            close(fd[0]);
+
+            printf("Current PID: %d, sibling PID: %d\n",getpid(), y);
+        } else {
+            close(fd[1]);
+            close(fd[0]);
+            printf("Parent PID: %d\n", getpid());
+        }
     }
 }
