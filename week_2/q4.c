@@ -4,6 +4,16 @@
 #include <string.h>
 #include <sys/wait.h>
 
+/*
+Tested the different versions of exec.
+Reading this page: https://man7.org/linux/man-pages/man3/exec.3.html
+Some of the commands appear to reference files and also have different inputs.
+Could be calling different parts of the system.
+
+Here is another article I found https://stackoverflow.com/questions/5769734/what-are-the-different-versions-of-exec-used-for-in-c-and-c.
+This one explains that there are different ways of passing arguments to be executed.
+Program doesn't appear to end without a wait on the parent.
+*/
 int main() {
 
     char *myargs[2];
