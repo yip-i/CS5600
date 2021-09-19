@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,12 +10,16 @@
 #include <sys/time.h>
 #include <fcntl.h>
 #include<errno.h>
+
 #include <sched.h>
 
 
 int main(int argc, char* argv[]) {
     
+    cpu_set_t my_set;
     CPU_ZERO(&my_set);
+    CPU_SET(7,&my_set);
+    sched_setaffinity(0, sizeof(cpu_set_t), &my_set);
 
     struct timeval start,stop;
     double difference;
@@ -35,10 +41,13 @@ int main(int argc, char* argv[]) {
         write(fd[1], &begin, sizeof(double));
         close(fd[1]);
     } else {
+
+        wait(NULL);
+        gettimeofday(&stop, NULL);
+
         close(fd[1]);
         read(fd[0], &begin, sizeof(double));
         close(fd[0]);
-        gettimeofday(&stop, NULL);
         difference = (stop.tv_usec - begin) * 100;
         printf("Time: %f\n", difference);
 
