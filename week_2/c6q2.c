@@ -36,10 +36,12 @@ int main(int argc, char* argv[]) {
     } else if (pid == 0) {
 
         gettimeofday(&start, NULL);
-        begin = start.tv_usec;
         close(fd[0]);
+        begin = start.tv_usec;
+
         write(fd[1], &begin, sizeof(double));
         close(fd[1]);
+        return 0;
     } else {
 
         wait(NULL);
