@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
         close(fd[1]);
         return 0;
     } else {
-
         wait(NULL);
         gettimeofday(&stop, NULL);
 
