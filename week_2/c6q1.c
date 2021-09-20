@@ -9,14 +9,15 @@
 #include <fcntl.h>
 #include<errno.h>
 
+
 int main(int argc, char* argv[]) {
     struct timeval start,stop;
-    double difference;
+    long difference;
 
     gettimeofday(&start, NULL);
     int filedesc = open("/Users/ianyip/Documents/Coding/CS5600/week_2/test", O_RDWR | O_CREAT, 0000);
     close(filedesc);
     gettimeofday(&stop, NULL);
     difference = (stop.tv_usec - start.tv_usec) * 100;
-    printf("difference: %f\n", difference);
+    printf("difference: %ld\n", difference);
 }

@@ -16,7 +16,7 @@
 
 int main(int argc, char* argv[]) {
     int fd[2];
-    struct timeval start,stop;
+    struct timeval start,stop, other_start;
     cpu_set_t my_set;
     CPU_ZERO(&my_set);
     CPU_SET(7,&my_set);
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
         gettimeofday(&start,NULL);
 
         long x = start.tv_usec;
-        write(fd[1], &x, sizeof(long));
+        write(fd[1], &start, sizeof(struct timeval));
         close(fd[1]);
         return 0;
     } else {
@@ -45,10 +45,11 @@ int main(int argc, char* argv[]) {
         gettimeofday(&stop, NULL);
         long y;
         close(fd[1]);
-        read(fd[0], &y, sizeof(long));
+        read(fd[0], &other_start, sizeof(struct timeval));
         close(fd[0]);
 
-        long difference = stop.tv_usec - y;
+        long difference = stop.tv_usec - other_start.tv_usec;
+        printf("seoncds: %ld\n", stop.tv_sec - other_start.tv_sec);
         printf("difference: %ld\n", difference * 100);
     }
     return 0;

@@ -33,21 +33,25 @@ int main(int argc, char* argv[]) {
     if (pid < 0) {
         printf("Error\n");
     } else if (pid == 0) {
-        long begin;
-        gettimeofday(&start, NULL);
         close(fd[0]);
-        begin = start.tv_sec;
-
-        write(fd[1], &begin, sizeof(long));
-        close(fd[1]);
+        dup2(fd[1],STDOUT_FILENO);
+        gettimeofday(&start, NULL);
+        long begin = start.tv_sec;
         printf("fork begin: %ld\n", begin);
+
+        //write(fd[1], &begin, sizeof(double));
+        close(fd[1]);
 
     } else {
         wait(NULL);
+        close(fd[1]);
+
         gettimeofday(&stop, NULL);
         long end;
-        close(fd[1]);
-        read(fd[0], &end, sizeof(long));
+        
+        //read(fd[0], &end, sizeof(double));
+        dup2(fd[0],stdin);
+        scanf("%ld", &end);
         close(fd[0]);
         difference = (stop.tv_sec - end);
         printf("Main begin: %ld\n", end);
@@ -58,5 +62,5 @@ int main(int argc, char* argv[]) {
     }
 
 
-
+    return 0;
 }
